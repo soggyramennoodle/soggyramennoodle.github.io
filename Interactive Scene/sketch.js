@@ -7,32 +7,50 @@
 let currentBack = 0; //handles background
 let characterX;
 let characterY;
-let characterColor;
+let characterColorR;
+let characterColorG;
+let characterColorB;
+let backgroundR;
+let backgroundG;
+let backgroundB;
 
 
 function setup() {
   createCanvas(700, 500);
   characterX = width/2;
   characterY = height/2;
-  characterColor = 255
+  characterColorR = 255;
+  characterColorG = 255;
+  characterColorB = 255;
+  backgroundR = 136;
+  backgroundG = 206;
+  backgroundB = 235;
+
 }
 
 function draw() {
-  if (currentBack === 0) {
-    background(136, 206, 235);
+
+  if (keyIsDown(17)) { //changes background with ctrl
+    currentBack++;
   }
-  else {
-    background(0);
+
+  if (currentBack > 4) {
+    currentBack = 0;
   }
+  
+  
+  backgroundChange();
   characterMovement();
   drawBackground();
   drawCharacter();
   textSize(26);
   text('adeeb', 610, 480);
-}
+  colorChange();
+  
+  }
 
 
-function drawBackground() {
+function drawBackground() { //draws everything but character
   
   //ground
   fill(100, 200, 125);
@@ -53,11 +71,11 @@ function drawBackground() {
   
 }
 
-function drawCharacter() {
+function drawCharacter() { //draws character
 
   //body
   strokeWeight(0.4);
-  fill(characterColor);
+  fill(characterColorR, characterColorB, characterColorB);
   rect(characterX, characterY, 75);
   
   //eyes
@@ -69,7 +87,7 @@ function drawCharacter() {
 
 }
 
-function characterMovement() {
+function characterMovement() { //handles character movement
   
   //character controls
   if (keyIsDown(DOWN_ARROW)) {
@@ -102,3 +120,47 @@ function characterMovement() {
     characterX = 0;
   }
 }
+
+function colorChange() { //character color change
+  if (keyIsDown(77)) { //m
+    characterColorR = random(0, 255);
+    characterColorG = random(0, 255);
+    characterColorB = random(0, 255);
+  }
+  if (keyIsDown(78)) { //n
+    characterColorR = charactercolorG = characterColorB = 255;
+  }
+}
+
+function backgroundChange() { //background color change
+  if (currentBack === 0) {
+    background(136, 206, 235);
+  }
+  else if (currentBack === 1) {
+    backgroundR = random(0, 255);
+    backgroundG = random(0, 255);
+    backgroundB = random(0, 255);
+    randomSeed(67);
+    background(backgroundR, backgroundG, backgroundB);
+  }
+
+  else if (currentBack === 2) {
+    backgroundR = random(0, 255);
+    backgroundG = random(0, 255);
+    backgroundB = random(0, 255);
+    randomSeed(9);
+    background(backgroundR, backgroundG, backgroundB);
+  }
+
+  else if (currentBack === 3) {
+    backgroundR = random(0, 255);
+    backgroundG = random(0, 255);
+    backgroundB = random(0, 255);
+    randomSeed(7);
+    background(backgroundR, backgroundG, backgroundB);
+  }
+}
+
+
+
+
