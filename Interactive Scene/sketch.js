@@ -5,16 +5,16 @@
 // An interactive scene controlled with user input.
 
 let currentBack = 0; //handles background
-let characterX;
-let characterY;
+let characterX; //character x pos
+let characterY; //character y pos
 let characterColorR;
-let characterColorG;
+let characterColorG; //character rgb variables
 let characterColorB;
 let backgroundR;
-let backgroundG;
+let backgroundG; //background rgb variables
 let backgroundB;
 
-
+///////////////////////////////////////////////////////////////////////////////////
 function setup() {
   createCanvas(700, 500);
   characterX = width/2;
@@ -25,20 +25,9 @@ function setup() {
   backgroundR = 136;
   backgroundG = 206;
   backgroundB = 235;
-
 }
-
+////////////////////////////////////////////////////////////////////////////////////
 function draw() {
-
-  if (keyIsDown(17)) { //changes background with ctrl
-    currentBack++;
-  }
-
-  if (currentBack > 4) {
-    currentBack = 0;
-  }
-  
-  
   backgroundChange();
   characterMovement();
   drawBackground();
@@ -46,10 +35,8 @@ function draw() {
   textSize(26);
   text('adeeb', 610, 480);
   colorChange();
-  
   }
-
-
+//////////////////////////////////////////////////////////////////////////////////////////
 function drawBackground() { //draws everything but character
   
   //ground
@@ -70,7 +57,7 @@ function drawBackground() { //draws everything but character
   circle(width*3/4, height/4, 100);
   
 }
-
+/////////////////////////////////////////////////////////////////////////////////////////////
 function drawCharacter() { //draws character
 
   //body
@@ -82,11 +69,13 @@ function drawCharacter() { //draws character
   fill(0);
   circle(characterX + 15 , characterY + 20, 15); //L
   circle(characterX + 60, characterY + 20, 15); //R
+
+  //mouth
   strokeWeight(3);
   line(characterX + 15, characterY + 50 , characterX  + 60, characterY + 50);
 
 }
-
+///////////////////////////////////////////////////////////////////////////////////////
 function characterMovement() { //handles character movement
   
   //character controls
@@ -120,7 +109,7 @@ function characterMovement() { //handles character movement
     characterX = 0;
   }
 }
-
+////////////////////////////////////////////////////////////////////////////////
 function colorChange() { //character color change
   if (keyIsDown(77)) { //m
     characterColorR = random(0, 255);
@@ -131,36 +120,38 @@ function colorChange() { //character color change
     characterColorR = charactercolorG = characterColorB = 255;
   }
 }
-
+////////////////////////////////////////////////////////////////////////////
 function backgroundChange() { //background color change
   if (currentBack === 0) {
     background(136, 206, 235);
   }
   else if (currentBack === 1) {
-    backgroundR = random(0, 255);
-    backgroundG = random(0, 255);
-    backgroundB = random(0, 255);
-    randomSeed(67);
+    backgroundR = 171;
+    backgroundG = 255;
+    backgroundB = 25;
     background(backgroundR, backgroundG, backgroundB);
   }
 
   else if (currentBack === 2) {
-    backgroundR = random(0, 255);
-    backgroundG = random(0, 255);
-    backgroundB = random(0, 255);
-    randomSeed(9);
+    backgroundR = 25;
+    backgroundG = 75; //i had planned to create random colors for the background, but i decided to keep fixed values
+    backgroundB = 165;
     background(backgroundR, backgroundG, backgroundB);
   }
 
   else if (currentBack === 3) {
-    backgroundR = random(0, 255);
-    backgroundG = random(0, 255);
-    backgroundB = random(0, 255);
-    randomSeed(7);
+    backgroundR = 150;
+    backgroundG = 25;
+    backgroundB = 235;
     background(backgroundR, backgroundG, backgroundB);
   }
 }
-
-
-
-
+//////////////////////////////////////////////////////////////////
+function mousePressed() { //center mouse button
+  if (mouseButton === CENTER) {
+    currentBack++;
+  }
+  if (currentBack > 3) {
+    currentBack = 0;
+  }
+}
