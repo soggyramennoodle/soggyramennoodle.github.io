@@ -6,22 +6,27 @@
 // - describe what you did to take this project "above and beyond"
 
 let rectTime = 5;
-let rectInterval = 0.1;
+let rectInterval = 0.01;
+let rectWidth = 5;
 
 
 function setup() {
   createCanvas(800, 800);
   frameRate(15);
-  // keyPressed();
+  background(220);
+  generateTerrain();
+
 }
 
 function draw() {
-  background(220);
-  keyPressed();
+  rectTime = 5;
 }
 
 function generateTerrain() {
-  let rectWidth = 20;
+
+  let rectX = 0;
+  let highestY = 0;
+
   for (let x = 0; x <= width; x += rectWidth) {
     noFill();
     let rectHeight = noise(rectTime);
@@ -29,10 +34,34 @@ function generateTerrain() {
     rect(x, height, rectWidth, -rectHeight);
     rectTime += rectInterval;
   }
+
+
+
+
 }
 
 function keyPressed() {
-  if (key === 'a') {
+  if (keyCode === RIGHT_ARROW) {
+    rectWidth += 0.2;
+    background(220);
     generateTerrain();
+
+    if (rectWidth < 1) {
+      rectWidth = 1;
+    }
   }
+
+  if (keyCode === LEFT_ARROW) {
+    rectWidth -= 0.2;
+    background(220);
+    generateTerrain();
+
+    if (rectWidth < 1) {
+      rectWidth = 1;
+    }
+  }
+}
+
+function drawFlag() {
+
 }
