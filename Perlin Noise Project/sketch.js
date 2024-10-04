@@ -68,6 +68,7 @@ function keyPressed() { //changes terrain size based on input
 
 function drawFlag() { //draws flag
   fill(255, 0, 0);
+  rectMode
   rect(rectX, height - highestY, 7, 20);
   
 }
