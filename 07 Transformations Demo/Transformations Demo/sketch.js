@@ -9,31 +9,80 @@ function setup() {
 }
 
 function draw() {
-  // background(255);
-  // drawBasicGrid(220);
-
+  background(220);
+  drawBasicGrid(190); //20px per square
 
   //transformation one: TRANSLATION
-
- 
-
+  // push(); //makes a copy of current coord system, and uses that as active system
+  // translate(120,120); //moves origin to point from (0,0), rather than transforming the shape itself
+  // drawBasicGrid(100);
+  // rectangleRed(40,20);
+  // pop(); //reverts to previous coord system
+  // rectangleBlue(40, 40);
   //add push()  pop()
 
-
++
 
 
   //transformation two: SCALE
+  // push();
+  // // rectMode(CORNER);
+  // // rectangleRed(40, 0);
+  
+  // // //SCALE FACTORS
+  // // //1 - no change  | <1, smaller  | >1, larger |
+  // // let scaleFactor = 2.5;
+  // // translate(100, 0);
+  // // scale(scaleFactor);
+  // // drawBasicGrid(100);
+  // // rectangleBlue(0, 0);
+  // rectMode(CENTER);
+  // translate(40, 40);
+  // let scaleFactor = map(mouseX, 0, mouseY, 0,4);
+  // scale(scaleFactor);
+  // drawBasicGrid(150);
+  // rectangleRed(40, 40);
 
+  // pop();
 
 
 
   //transformation three: ROTATION
   //reminder: rotations are measured in radians, not degrees! Functions can help with the conversion...
- 
+  //can use angleMode(DEGREES) if we want
+  angleMode(DEGREES);
+  // push()
+  // rectangleRed(20, 20);
+  // translate(200, 200);
+  // drawBasicGrid(100);
+  // rotate(frameCount%360);
+  // // drawBasicGrid(100);
+  // face(0, 0);
+  // pop()
 
 
   //Combinations of Transformations
+  // push();
+  // // translate(100, 100);
+  // scale(1);
+  // rotate(45);
+  // face(0, 0);
+  // pop();
 
+
+  //DRAWING CHALLENGE
+  push();
+  translate(200, 200);
+  circle(0, 0, 150);
+  rotate(frameCount);
+  let numSpokes = map(mouseX, 0, width, 0,360)
+  numSpokes = floor(numSpokes);
+  for (let i = 0; i < numSpokes; i++) {
+    line(0, 0, 75, 0);
+    rotate(360/numSpokes);
+    print(numSpokes, 360/numSpokes);
+  }
+  
   
 
 }
