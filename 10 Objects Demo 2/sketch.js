@@ -15,6 +15,7 @@ function draw() {
   background(255);
   for (let i = 0; i < points.length; i++) {
     points[i].display();
+    points[i].connectPoints(points);
     points[i].move();
   }
 }
@@ -42,6 +43,25 @@ class MiniPoint {
     circle(this.x, this.y, this.s);
   }
 
+  connectPoints(pointArray) {
+    stroke(this.c);
+    for (let i = 0; i < pointArray.length; i++) {
+      if (this !== pointArray[i]) {
+        if (dist(this.x, this.y, pointArray[i].getX(), pointArray[i].getY()) < 300) {
+          line(this.x, this.y, pointArray[i].getX(), pointArray[i].getY());
+        }
+      }
+    }
+  }
+
+  getX() {
+    return this.x;
+  }
+
+  getY() {
+    return this.y;
+  }
+
   move() {
     let xSpeed = map(noise(this.noiseX), 0, 1, -this.maxSpeed, this.maxSpeed);
     let ySpeed = map(noise(this.noiseY), 0, 1, -this.maxSpeed, this.maxSpeed);
@@ -49,5 +69,19 @@ class MiniPoint {
     this.y += ySpeed;
     this.noiseX += this.offset;
     this.noiseY += this.offset;
+
+    //makes dots stay in frame, continues from other side like a loopback
+    if (this.x < 0) {
+      this.x += width;
+    }
+    if (this.x > width) {
+      this.x -= width;
+    }
+    if (this.y < 0) {
+      this.y += height;
+    }
+    if (this.y > height) {
+      this.y -= height;
+    }
   }
 }
