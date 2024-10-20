@@ -26,7 +26,7 @@ function drawRoad() {
 
 class Vehicle {
   ///////constructor////////
-  constructor(x, y, type, color, direction, xSpeed) {
+  constructor(y, type, direction) {
     this.x = x;
     this.y = y;
     this.color = (random(255), random(255), random(255));
