@@ -27,9 +27,9 @@ function drawRoad() {
 
 class Vehicle {
   ///////constructor////////
-  constructor(y, type, direction) {
+  constructor(y, type, direction, color) {
     this.type = type; //0 is car, 1 is truck
-    this.color = (random(255), random(255), random(255)); //will be randomized above
+    this.color = color;
     this.direction = direction; //0 is westbound, 1 is eastbound
 
     //if eastbound, then start at left, otherwise start at right
@@ -47,6 +47,10 @@ class Vehicle {
     if (this.direction === 0) {
       this.xSpeed *= -1;
     }
+  }
+
+  action() {
+
   }
 
   display() {
@@ -97,5 +101,10 @@ class Vehicle {
       if (this.xSpeed >= 0) {
         this.xSpeed = -5;
       }
+    }
   }
+
+  changeColor() {
+    this.color = color(random(255), random(255), random(255));
   }
+}
