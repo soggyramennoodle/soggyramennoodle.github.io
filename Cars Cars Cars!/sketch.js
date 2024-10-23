@@ -2,16 +2,43 @@
 // Adeeb Rahman
 // 10.18.2024
 
+///////////////notes while coding:///////////
+//right now, vehicle is getting faster and faster, and not slowing. 
+//you need to add a cap to this.xSpeed!!
+//might need to tweak xSpeed values to be smaller
+/////////////////////////////////////////////////////
+
 let eastbound = [];
 let westbound = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  //create 20 cars in eastbound
+  for (let i = 0; i < 20; i++) {
+    eastbound.push(new Vehicle(random(height/4 + 20, height/2 - 40), int(random(0, 2)), 1));
+  }
+
+  //create 20 cars in westbound
+  for (let i = 0; i < 20; i++) {
+    westbound.push(new Vehicle(random(height/2 + 20, height*3/4 - 40), int(random(0,2)), 0));
+  }
+  //the constant values were added to prevent overlap with middle or off-road vehicles
 }
 
 function draw() {
   background(220);
   drawRoad();
+
+  //for every vehicle going east, apply .action()
+  for (let i = 0; i < eastbound.length; i++) {
+    eastbound[i].action();
+  }
+
+  //for every vehicle going west, apply .action()
+  for (let i = 0; i < westbound.length; i++) {
+    westbound[i].action();
+  }
 }
 
 function drawRoad() {
@@ -25,12 +52,19 @@ function drawRoad() {
   }
 }
 
+/////////////////////////////CLASS//////////////////////////////////
+
 class Vehicle {
+
   ///////constructor////////
-  constructor(y, type, direction, color) {
-    this.type = type; //0 is car, 1 is truck
-    this.color = color;
-    this.direction = direction; //0 is westbound, 1 is eastbound
+  constructor(y, type, direction) {
+
+    //0 is a car, 1 is a truck
+    this.type = type;
+    this.color = color((random(255), random(255), random(255)));
+
+    //0 is westbound, 1 is eastbound
+    this.direction = direction;
 
     //if eastbound, then start at left, otherwise start at right
     if (this.direction === 1) {
@@ -49,15 +83,27 @@ class Vehicle {
     }
   }
 
+  //.action() contains all functions for vehicles to do things
   action() {
-
+    this.move();
+    if (random(0, 1) < 0.01) {
+      this.speedUp();
+    }
+    if (random(1) < 0.01) {
+      this.speedDown();
+    }
+    if (random(1) < 0.01) {
+      this.changeColor();
+    }
+    this.display();
   }
 
+  //for vehicle appearance
   display() {
     fill(this.color);
     ///car
     if (this.type === 0) {
-      rect(this.x, this.y, 60, 25);
+      ellipse(this.x, this.y, 60, 25);
     }
     ///truck
     else if (this.type === 1) {
@@ -96,7 +142,7 @@ class Vehicle {
       }
     } 
     //if car going west, then add negative to slow down
-    if (this.direction === 1) {
+    if (this.direction === 0) {
       this.xSpeed += random(0, 15);
       if (this.xSpeed >= 0) {
         this.xSpeed = -5;
