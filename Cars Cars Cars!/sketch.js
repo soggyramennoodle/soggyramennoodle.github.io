@@ -2,33 +2,46 @@
 // Adeeb Rahman
 // 10.18.2024
 
-///////////////notes while coding:///////////
-//right now, vehicle is getting faster and faster, and not slowing. 
-//you need to add a cap to this.xSpeed!!
-//might need to tweak xSpeed values to be smaller
-/////////////////////////////////////////////////////
 
+//global variables
 let eastbound = [];
 let westbound = [];
+let myLight;
+let redFrames;
+let trafficLightColor = "green";
+
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   //create 20 cars in eastbound
   for (let i = 0; i < 20; i++) {
-    eastbound.push(new Vehicle(random(height/4 + 20, height/2 - 40), int(random(0, 2)), 1));
+    eastbound.push(new Vehicle(random(height/2 + 20, height*3/4 - 40), int(random(0, 2)), 1));
   }
 
   //create 20 cars in westbound
   for (let i = 0; i < 20; i++) {
-    westbound.push(new Vehicle(random(height/2 + 20, height*3/4 - 40), int(random(0,2)), 0));
+    westbound.push(new Vehicle(random(height/4 + 20, height/2 - 40), int(random(0,2)), 0));
   }
   //the constant values were added to prevent overlap with middle or off-road vehicles
+
+  //light
+  myLight = new Light(width/2, (height/4)/2);
 }
 
 function draw() {
   background(220);
   drawRoad();
+  myLight.display();
+  controlLight();
+
+  //stop vehicles on red
+  for (let i of eastbound) {
+    if (trafficLightColor === "red") {
+      i.display();
+    }
+  }
 
   //for every vehicle going east, apply .action()
   for (let i = 0; i < eastbound.length; i++) {
@@ -52,7 +65,77 @@ function drawRoad() {
   }
 }
 
+function mouseClicked() {
+
+  //adds car to westbound when shift click
+  if (keyIsPressed && keyCode === SHIFT) {
+    westbound.push(new Vehicle(random(height/4 + 20, height/2 - 40), int(random(0,2)), 0));
+  }
+
+  //adds car when just click
+  else {
+    eastbound.push(new Vehicle(random(height/2 + 20, height*3/4 - 40), int(random(0, 2)), 1));
+  }
+}
+
+function controlLight() {
+  if (trafficLightColor === "red") {
+    redFrames++;
+  }
+  if (redFrames >= 120) {
+    trafficLightColor = "green";
+    redFrames = 0;
+    myLight.light = "green";
+  }
+}
+
+function keyPressed() {
+  if (keyCode === 32) {
+    trafficLightColor = "red";
+    myLight.light = "red";
+    redFrames = 0;
+  }
+}
+
 /////////////////////////////CLASS//////////////////////////////////
+
+class Light {
+  //////////constructor//////////
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.light = "green";
+  }
+
+  display() {
+    fill(255, 255, 0);
+    rect(this.x, this.y, 60, 90);
+    
+    if (this.light === "green") {
+      fill(30, 255, 0);
+      circle(this.x + 30, this.y + 45, 40);
+    }
+
+    if (this.light === "red") {
+      fill(255, 30, 0);
+      circle(this.x + 30, this.y + 45, 40);
+    }
+  }
+
+  lightSwitch() {
+
+    //if light is green, switch to red
+    if (this.light === "green") {
+      this.light = "red";
+    }
+
+    //if light is red, switch to green
+    if (this.light === "red") {
+      this.light = "green";
+    }
+  }
+}
+
 
 class Vehicle {
 
@@ -75,7 +158,7 @@ class Vehicle {
     }
 
     this.y = y; 
-    this.xSpeed = random(5, 20);
+    this.xSpeed = random(3, 20);
 
     //if going westbound, turn xSpeed negative to go from eastbound to west
     if (this.direction === 0) {
@@ -123,13 +206,19 @@ class Vehicle {
   }
 
   speedUp() {
-    //if car going east, then add random value to speed
+    //if car going east, then add random value to speed (positive)
     if (this.direction === 1) {
-      this.xSpeed += random(0, 15);
+      this.xSpeed += random(0, 3);
+      if (this.xSpeed > 15) {
+        this.xSpeed = 15;
+      }
     }
     //if car going west, then add random value to speed (negative)
     else if (this.direction === 0) {
-      this.xSpeed -= random(0, 15);
+      this.xSpeed -= random(0, 3);
+      if (this.xSpeed < -15) {
+        this.xSpeed = -15;
+      }
     }
   }
 
@@ -138,14 +227,14 @@ class Vehicle {
     if (this.direction === 1) {
       this.xSpeed -= random(0, 15);
       if (this.xSpeed <= 0) {
-        this.xSpeed = 5;
+        this.xSpeed = 4;
       }
     } 
     //if car going west, then add negative to slow down
     if (this.direction === 0) {
       this.xSpeed += random(0, 15);
       if (this.xSpeed >= 0) {
-        this.xSpeed = -5;
+        this.xSpeed = -4;
       }
     }
   }
