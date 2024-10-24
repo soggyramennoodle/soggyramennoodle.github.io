@@ -27,8 +27,9 @@ function setup() {
   //the constant values were added to prevent overlap with middle or off-road vehicles
 
   //light
-  myLight = new Light(width/2, (height/4)/2);
+  myLight = new Light(width/2, height/4/2);
 }
+////////////////////////////////////////////////////////////////////////////////
 
 function draw() {
   background(220);
@@ -37,15 +38,17 @@ function draw() {
   controlLight();
 
   //stop vehicles on red
-  for (let i of eastbound) {
-    if (trafficLightColor === "red") {
-      i.display();
-    }
-  }
+
+  
 
   //for every vehicle going east, apply .action()
   for (let i = 0; i < eastbound.length; i++) {
     eastbound[i].action();
+    if (trafficLightColor === "red") {
+      for (let i = 0; i < eastbound.length; i++) {
+        eastbound[i].display();
+      }
+    }
   }
 
   //for every vehicle going west, apply .action()
@@ -53,6 +56,7 @@ function draw() {
     westbound[i].action();
   }
 }
+////////////////////////////////////////////////////////////////////////////////
 
 function drawRoad() {
   fill(0);
@@ -65,6 +69,7 @@ function drawRoad() {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
 function mouseClicked() {
 
   //adds car to westbound when shift click
@@ -81,11 +86,11 @@ function mouseClicked() {
 function controlLight() {
   if (trafficLightColor === "red") {
     redFrames++;
-  }
-  if (redFrames >= 120) {
-    trafficLightColor = "green";
-    redFrames = 0;
-    myLight.light = "green";
+    if (redFrames >= 120) {
+      trafficLightColor = "green";
+      redFrames = 0;
+      myLight.light = "green";
+    }
   }
 }
 
@@ -94,6 +99,7 @@ function keyPressed() {
     trafficLightColor = "red";
     myLight.light = "red";
     redFrames = 0;
+    redFrames++;
   }
 }
 
@@ -122,6 +128,7 @@ class Light {
     }
   }
 
+
   lightSwitch() {
 
     //if light is green, switch to red
@@ -136,6 +143,7 @@ class Light {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
 
 class Vehicle {
 
@@ -195,7 +203,7 @@ class Vehicle {
   }
 
   move() {
-    //keep vehicles in frame
+    //keep vehicles in frame and control movement
     this.x += this.xSpeed;
     if (this.x > width) {
       this.x -= width;
