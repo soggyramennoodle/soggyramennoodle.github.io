@@ -14,22 +14,18 @@ let trafficLightColor = "green";
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
   //create 20 cars in eastbound
   for (let i = 0; i < 20; i++) {
     eastbound.push(new Vehicle(random(height/2 + 20, height*3/4 - 40), int(random(0, 2)), 1));
   }
-
   //create 20 cars in westbound
   for (let i = 0; i < 20; i++) {
     westbound.push(new Vehicle(random(height/4 + 20, height/2 - 40), int(random(0,2)), 0));
   }
-  //the constant values were added to prevent overlap with middle or off-road vehicles
-
-  //light
   myLight = new Light(width/2, height/4/2);
 }
-////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function draw() {
   background(220);
@@ -38,25 +34,37 @@ function draw() {
   controlLight();
 
   //stop vehicles on red
+  for (let i = 0; i < eastbound.length; i++) {
+    if (trafficLightColor === "red") {
+      eastbound[i].xSpeed = 0;
+    }
+    else {
+      eastbound[i].action();
+    }
+  }
 
+  for (let i = 0; i < westbound.length; i++) {
+    if (trafficLightColor === "red") {
+      westbound[i].xSpeed = 0;
+    }
+    else {
+      westbound[i].action();
+    }
+  }
   
 
   //for every vehicle going east, apply .action()
   for (let i = 0; i < eastbound.length; i++) {
     eastbound[i].action();
-    if (trafficLightColor === "red") {
-      for (let i = 0; i < eastbound.length; i++) {
-        eastbound[i].display();
-      }
     }
-  }
-
+    
   //for every vehicle going west, apply .action()
   for (let i = 0; i < westbound.length; i++) {
     westbound[i].action();
   }
 }
-////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function drawRoad() {
   fill(0);
@@ -69,14 +77,13 @@ function drawRoad() {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-function mouseClicked() {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function mouseClicked() {
   //adds car to westbound when shift click
   if (keyIsPressed && keyCode === SHIFT) {
     westbound.push(new Vehicle(random(height/4 + 20, height/2 - 40), int(random(0,2)), 0));
   }
-
   //adds car when just click
   else {
     eastbound.push(new Vehicle(random(height/2 + 20, height*3/4 - 40), int(random(0, 2)), 1));
@@ -84,12 +91,12 @@ function mouseClicked() {
 }
 
 function controlLight() {
+  //count 120 frames when red
   if (trafficLightColor === "red") {
     redFrames++;
     if (redFrames >= 120) {
       trafficLightColor = "green";
       redFrames = 0;
-      myLight.light = "green";
     }
   }
 }
@@ -97,9 +104,7 @@ function controlLight() {
 function keyPressed() {
   if (keyCode === 32) {
     trafficLightColor = "red";
-    myLight.light = "red";
     redFrames = 0;
-    redFrames++;
   }
 }
 
@@ -110,63 +115,53 @@ class Light {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.light = "green";
   }
 
   display() {
     fill(255, 255, 0);
     rect(this.x, this.y, 60, 90);
     
-    if (this.light === "green") {
+    if (trafficLightColor === "green") {
       fill(30, 255, 0);
       circle(this.x + 30, this.y + 45, 40);
     }
 
-    if (this.light === "red") {
+    if (trafficLightColor === "red") {
       fill(255, 30, 0);
       circle(this.x + 30, this.y + 45, 40);
     }
   }
 
-
   lightSwitch() {
-
     //if light is green, switch to red
-    if (this.light === "green") {
-      this.light = "red";
+    if (trafficLightColor === "green") {
+      trafficLightColor = "red";
     }
-
     //if light is red, switch to green
-    if (this.light === "red") {
-      this.light = "green";
+    if (trafficLightColor === "red") {
+      trafficLightColor = "green";
     }
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Vehicle {
-
   ///////constructor////////
   constructor(y, type, direction) {
-
-    //0 is a car, 1 is a truck
-    this.type = type;
+    this.y = y; 
+    this.xSpeed = random(3, 20);
+    this.type = type; //0 is car, 1 is truck
     this.color = color((random(255), random(255), random(255)));
 
-    //0 is westbound, 1 is eastbound
+    //0 is westbound, 1 is eastbound. if eastbound, then start at left, otherwise start at right
     this.direction = direction;
-
-    //if eastbound, then start at left, otherwise start at right
     if (this.direction === 1) {
       this.x = 0;
     }
     else {
       this.x = width;
     }
-
-    this.y = y; 
-    this.xSpeed = random(3, 20);
 
     //if going westbound, turn xSpeed negative to go from eastbound to west
     if (this.direction === 0) {
