@@ -56,7 +56,7 @@ function draw() {
   //for every vehicle going east, apply .action()
   for (let i = 0; i < eastbound.length; i++) {
     eastbound[i].action();
-    }
+  }
     
   //for every vehicle going west, apply .action()
   for (let i = 0; i < westbound.length; i++) {
