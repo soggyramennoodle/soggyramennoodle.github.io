@@ -2,12 +2,13 @@
 //Adeeb Rahman
 //10.29.2024
 
-
+//working on overlay
 
 let NUM_ROWS = 4;
 let NUM_COLS = 5;
 let rectWidth, rectHeight;
 let currentRow, currentCol;
+let flipPattern = "cross";
 let grid = [[0,0,0,255,0],
                 [0,0,0,0,0],
                 [0,255,0,0,0],
@@ -20,6 +21,7 @@ function setup() {
   createCanvas(500, 300);
   rectWidth = width/NUM_COLS;
   rectHeight = height/NUM_ROWS;
+  randomizeBoard();
 }
 
 function draw() {
@@ -33,15 +35,29 @@ function draw() {
 
 function mousePressed(){
   // cross-shaped pattern flips on a mouseclick. Boundary conditions are checked within the flip function to ensure in-bounds access for array
-  if (keyIsDown(SHIFT)) {
-    flip(currentCol, currentRow);
-  }
-  else{
-    flip(currentCol, currentRow);
-    flip(currentCol-1, currentRow);
-    flip(currentCol+1, currentRow);
-    flip(currentCol, currentRow-1);
-    flip(currentCol, currentRow+1);
+  if (flipPattern === "cross") { 
+    if (keyIsDown(SHIFT)) {
+      flip(currentCol, currentRow);
+    }
+    else{
+      flip(currentCol, currentRow);
+      flip(currentCol-1, currentRow);
+      flip(currentCol+1, currentRow); //flip in a cross pattern
+      flip(currentCol, currentRow-1);
+      flip(currentCol, currentRow+1);
+    }
+  } 
+
+  else if (flipPattern === "square") {
+    if (keyIsDown(SHIFT)) {
+      flip(currentCol, currentRow);
+    }
+    else {
+      flip(currentCol, currentRow);
+      flip(currentCol+1, currentRow); //flip in a square pattern
+      flip(currentCol+1, currentRow+1);
+      flip(currentCol, currentRow+1);
+    }
   }
 }
 
@@ -77,23 +93,56 @@ function drawGrid(){
 }
 
 function checkWin() {
-  let referenceSquare = grid[0][0];
-  let winState = false;
+  let allWhite = true; //assume that all squares are the same color
+  let allBlack = true;
   for (let x = 0; x < NUM_COLS ; x++){
     for (let y = 0; y < NUM_ROWS; y++){
-      if (grid[y][x] === referenceSquare) {
-        winState = true;
+      if (grid[y][x] !== 255) { //as check happens, if one square isn't white, allWhite is false
+        allWhite = false;
+      }
+      if (grid[y][x] !== 0) { //as check happens, if one square isn't black, allBlack is false
+        allBlack = false;
       }
     }
   }
-  if (winState === true) {
+
+  if (allWhite === true || allBlack === true) { //if either outcome is satisfied, you win
     fill(255, 0, 0);
-    print("you win");
     textSize(40);
-    textAlign(CENTER, CENTER);
-    text("You Win", width/2, height/-2);
-    noLoop();
+    textAlign(CENTER);
+    text('you win', width/2, height/2);
   }
 }
+
+function randomizeBoard() {
+  for (let x = 0; x < NUM_COLS ; x++){
+    for (let y = 0; y < NUM_ROWS; y++){
+      if (int(random(1, 3)) === 1) { //chooses randomly between 1, 2, and either does 0, or 255 for each square
+        grid[y][x] = 0;
+      }
+      else {
+        grid[y][x] = 255;
+      }
+    }
+  }
+}
+
+function keyPressed() {
+  if (keyCode === 32) { //if space pressed, then change flipping pattern
+    if (flipPattern === "cross") {
+      flipPattern = "square";
+    }
+    else if (flipPattern === "square") {
+      flipPattern = "cross";
+    }
+  }
+}
+
+function overlay() {
+  if (flipPattern === "cross") {
+    
+  }
+}
+
 
 
