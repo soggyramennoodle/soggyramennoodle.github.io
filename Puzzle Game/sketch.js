@@ -39,14 +39,14 @@ function mousePressed(){
   // cross-shaped pattern flips on a mouseclick. Boundary conditions are checked within the flip function to ensure in-bounds access for array
   if (flipPattern === "cross") { 
     if (keyIsDown(SHIFT)) {
-      flip(currentCol, currentRow);
+      flip(currentCol, currentRow, false);
     }
     else{
-      flip(currentCol, currentRow);
-      flip(currentCol-1, currentRow);
-      flip(currentCol+1, currentRow); //flip in a cross pattern
-      flip(currentCol, currentRow-1);
-      flip(currentCol, currentRow+1);
+      flip(currentCol, currentRow, false);
+      flip(currentCol-1, currentRow, false);
+      flip(currentCol+1, currentRow, false); //flip in a cross pattern
+      flip(currentCol, currentRow-1, false);
+      flip(currentCol, currentRow+1, false);
     }
   } 
 
@@ -63,17 +63,23 @@ function mousePressed(){
   }
 }
 
-function flip(col, row){
-  // given a column and row for the 2D array, flip its value from 0 to 255 or 255 to 0
-  // conditions ensure that the col and row given are valid and exist for the array. If not, no operations take place.
-  if (col >= 0 && col < NUM_COLS ){
-    if (row >= 0 && row < NUM_ROWS){
-      if (grid[row][col] === 0) {
-        grid[row][col] = 255;
-      } 
-      else {
-        grid[row][col] = 0;
-      } 
+function flip(col, row, highlight = false){
+  if (col >= 0 && col < NUM_COLS && row >= 0 && row < NUM_ROWS) {
+    if (highlight === true) {
+      fill(0, 255, 0, 100);
+      rect(col*rectWidth, row*rectHeight, rectWidth, rectHeight);
+    }
+    else {
+      if (col >= 0 && col < NUM_COLS ){
+        if (row >= 0 && row < NUM_ROWS){
+          if (grid[row][col] === 0) {
+            grid[row][col] = 255;
+          } 
+          else {
+            grid[row][col] = 0;
+          } 
+        }
+      }
     }
   }
 }
@@ -141,7 +147,30 @@ function keyPressed() {
 }
 
 function makeOverlay() {
-
+  if (flipPattern === "cross") {
+    if (keyIsDown(SHIFT)) {
+      flip(currentCol, currentRow, true);
+    }
+    else {
+      fill(0, 255, 0, 100);
+      flip(currentCol, currentRow, true);
+      flip(currentCol-1, currentRow, true);
+      flip(currentCol+1, currentRow, true); //flip in a cross pattern
+      flip(currentCol, currentRow-1, true);
+      flip(currentCol, currentRow+1, true);
+    }
+  }
+  else if (flipPattern === "square") {
+    if (keyIsDown(SHIFT)) {
+      flip(currentCol, currentRow, true);
+    }
+    else {
+      flip(currentCol, currentRow, true);
+      flip(currentCol+1, currentRow, true); //flip in a square pattern
+      flip(currentCol+1, currentRow+1, true);
+      flip(currentCol, currentRow+1, true);
+    }
+  }
 }
 
 
