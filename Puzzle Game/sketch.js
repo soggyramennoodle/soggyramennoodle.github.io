@@ -2,7 +2,7 @@
 //Adeeb Rahman
 //10.29.2024
 
-//working on overlay
+//working on overlay rn
 
 let NUM_ROWS = 4;
 let NUM_COLS = 5;
@@ -13,6 +13,7 @@ let grid = [[0,0,0,255,0],
                 [0,0,0,0,0],
                 [0,255,0,0,0],
                 [255,255,255,0,0]];
+
 
 
 
@@ -29,6 +30,7 @@ function draw() {
   determineActiveSquare();   //figure out which tile the mouse cursor is over
   drawGrid();                //render the current game board to the screen (and the overlay)
   checkWin();
+  makeOverlay();
 }
 
 
@@ -138,10 +140,8 @@ function keyPressed() {
   }
 }
 
-function overlay() {
-  if (flipPattern === "cross") {
-    
-  }
+function makeOverlay() {
+
 }
 
 
