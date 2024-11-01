@@ -1,4 +1,4 @@
-//Puzzle Game
+//
 //Adeeb Rahman
 //10.29.2024
 
@@ -140,7 +140,7 @@ function keyPressed() {
     if (flipPattern === "cross") {
       flipPattern = "square";
     }
-    else if (flipPattern === "square") {
+    else if (flipPattern === "square ") {
       flipPattern = "cross";
     }
   }
