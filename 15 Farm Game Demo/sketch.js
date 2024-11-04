@@ -41,17 +41,8 @@ function swap(x1, y1, x2, y2) { //will swap coordinates in level
 function keyPressed() {
 //////////////////////////////////////////////////////////////////////////////
   if (keyCode === UP_ARROW) {
-    if (level[playerY-1][playerX] === 0) {
-      swap(playerX, playerY, playerX, playerY - 1);
-      playerY--;
-    }
-    else if (level[playerY - 1][playerX] === 1) {
-      if (playerY > 1 && level[playerY - 2][playerX] === 0) {
-        swap(playerX, playerY-1, playerX, playerY-2);
-        swap(playerX, playerY-1, playerX, playerY);
-        playerX--;
-      }
-    }
+    swap(playerX, playerY, playerX, playerY - 1);
+    playerY--;
   }
   //////////////////////////////////////////////////////////////////////////////
   if (keyCode === DOWN_ARROW) {
@@ -79,6 +70,7 @@ function keyPressed() {
   }
 //////////////////////////////////////////////////////////////////////////////
 }
+
 
 
 function renderBoard() {
