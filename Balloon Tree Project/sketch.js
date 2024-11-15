@@ -5,12 +5,14 @@
 
 let scale = 15;
 
+
 function setup() {
   createCanvas(500, 500);
   background(220);
 }
 
 function draw() {
+  
   drawTree(width/2, height*0.9, 90, 6);
 }
 
@@ -27,18 +29,22 @@ function drawTree(x1, y1, angle, depth) {
     let y2 = y1 - (sin(radians(angle))*depth*scale); //using trig ratios. Get shorter based on depth
     drawLine(x1, y1, x2, y2, depth);
     
-    //for a 2-branch tree:
-    // drawTree(x2, y2, angle-18, depth-1);
-    // drawTree(x2, y2, angle+18, depth-1);
+    //draw balloons
+    noStroke();
+    if (depth < 5) {
+      drawLeaf(x2, y2, random(depth*random(6,10)));
+    }
 
-    //for a 3 branch tree
+    //draw tree branches
+    stroke(50);
     drawTree(x2, y2, angle-30, depth-1);
     drawTree(x2, y2, angle+0, depth-1);
     drawTree(x2, y2, angle+30, depth-1);
   }
 }
 
-function drawLeaf() {
-  fill(random(255), random(255), random(255));
+function drawLeaf(x, y, depth) {
   
+  fill(random(255), random(255), random(255));
+  circle(x, y, depth);
 }
