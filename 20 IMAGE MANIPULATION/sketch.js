@@ -6,7 +6,7 @@
 let pilot; //p.5 image
 
 function preload() {
-  pilot = loadImage('assets/aviator.png');
+  pilot = loadImage('assets/neo.jpg');
 }
 
 function setup() {
